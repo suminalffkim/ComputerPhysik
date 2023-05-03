@@ -45,7 +45,7 @@ double getAbstand(long long int elem1[3], long long int elem2[3]){
 double getEinzelEnergie(long long int elem1[3], long long int elem2[3]){
     double r=getAbstand(elem1,elem2);
     
-    if (r==0){ //fuer flache Kristall. wenn r=0 ist wird Energie inf
+    if (r==0){ //fuer flache Kristall. wenn r=0 ist wird Energie inf, deswegen wird r=0 weggelassen
     return 0;
     }
     
@@ -61,6 +61,7 @@ double getEinzelEnergie(long long int elem1[3], long long int elem2[3]){
 double getGesEnergie(int Anzahl){
     long long int N= pow(Anzahl,3); //Anzahl der gesamte Atome
     long long int elem[N][3]; //Plaetze der jeweile Atomen
+    
     //die Position von alle einzelne Bausteine erstellen.
     int row=0;
         for (long long int x=0;x<Anzahl;x++){
@@ -77,6 +78,14 @@ double getGesEnergie(int Anzahl){
                 }
             }
         } 
+    
+    //Ausgabe einzelne Atomposition
+//    for (int a=0;a<N;a++){
+//        for (int b=0;b<3;b++){
+//            printf("%d",elem[a][b]);
+//        }
+//        printf("\n");
+//    }
     
     
     long long int elem1[3],elem2[3];
@@ -109,6 +118,7 @@ double getGesEnergie(int Anzahl){
 double getGesEnergieFlach(int Anzahl){
     long long int N= pow(Anzahl,3); //Anzahl der gesamte Atome
     long long int elem[N][3]; //Plaetze der jeweile Atomen
+    
     //die Position von alle einzelne Bausteine erstellen.
     long long int row=0;
         for (long long int x=0;x<Anzahl;x++){
@@ -156,17 +166,9 @@ double getGesEnergieFlach(int Anzahl){
  ***********************************************************************/    
 int main(int argc, char** argv) {
     int Anzahl=70; //Die Anzahl der Atome pro Linie  !Ab 7x Segmentation fault! 
-    double V_i[Anzahl-2][2]; // Madelung Energie
-    double V_ifl[Anzahl-2][2]; //fuer flache kristall
+    double V_i[Anzahl-1][2]; // Array fuer Madelung Energie
+    double V_ifl[Anzahl-1][2]; //fuer flache kristall
 
-    
-    //Ausgabe einzelne Atomposition
-//    for (int a=0;a<N;a++){
-//        for (int b=0;b<3;b++){
-//            printf("%d",elem[a][b]);
-//        }
-//        printf("\n");
-//    }
     
     //Energie berechnen.
     long long int row=0;
@@ -176,15 +178,15 @@ int main(int argc, char** argv) {
         row++;
     }
     //printf("Anzahl  Energie\n");
-    for(long long int i=0;i<row;i++){
+    /*for(long long int i=0;i<row;i++){
        // printf("%d  %25.16e\n",i+2,V_i[i][1]);
     }
-    
+    */
     //Die Ergebnisse werden in einer Text Datei gespeichert. 
     FILE *f = fopen("madelung.txt", "w");
     for(long long int i=0;i<row;i++) {
         for(int j=0;j<2;j++) {
-            fprintf(f,"%25.16e",V_i[i][j]);
+            fprintf(f,"%25.13e",V_i[i][j]);
         }
         fprintf(f,"\n");
     }
@@ -203,7 +205,7 @@ int main(int argc, char** argv) {
     FILE *fp = fopen("madelungFlach.txt", "w");
     for(long long int i=0;i<row;i++) {
         for(int j=0;j<2;j++) {
-            fprintf(fp,"%25.16e",V_ifl[i][j]);
+            fprintf(fp,"%25.13e",V_ifl[i][j]);
         }
         fprintf(fp,"\n");
     }
